@@ -8,25 +8,35 @@ export const LoginForm = () => {
 
   const isDisabled = () => !username || !password;
 
-  const handleLogin = (e) => {
-    setError('');
-    setSuccess('');
-    e.preventDefault();
-    fetch('/api/auth', {
-      method: 'POST',
-      body: JSON.stringify({
-        username,
-        password,
-      }),
+/**
+ * 处理用户登录的函数
+ * @param {Event} e - 登录表单提交事件
+ */
+const handleLogin = (e) => {
+  // 在提交表单前清除之前的错误和成功提示
+  setError('');
+  setSuccess('');
+  // 阻止表单的默认提交行为
+  e.preventDefault();
+  // 发送POST请求到API进行用户身份验证
+  fetch('/api/auth', {
+    method: 'POST',
+    // 将用户名和密码作为JSON数据发送
+    body: JSON.stringify({
+      username,
+      password,
+    }),
+  })
+    .then((res) => res.json())
+    .then(() => {
+      // 登录成功后显示成功提示
+      setSuccess('Success Logging In');
     })
-      .then((res) => res.json())
-      .then(() => {
-        setSuccess('Success Logging In');
-      })
-      .catch((err) => {
-        setError('Error Logging In');
-      });
-  };
+    .catch((err) => {
+      // 登录失败时显示错误提示
+      setError('Error Logging In');
+    });
+};
 
   return (
     <form>
